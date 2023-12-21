@@ -52,12 +52,12 @@ namespace API.Controllers
                 Token = await _tokenService.GenerateToken(user),
                 Basket = anonBasket != null ? anonBasket.MapBasketToDto() : userBasket?.MapBasketToDto()
             };
-       }
+        }
 
-       [HttpPost("register")]
-       public async Task<ActionResult> Register(RegisterDTO registerDTO)
-       {
-            var user = new User{UserName = registerDTO.UserName, Email = registerDTO.Email};
+        [HttpPost("register")]
+        public async Task<ActionResult> Register(RegisterDTO registerDTO)
+        {
+            var user = new User { UserName = registerDTO.UserName, Email = registerDTO.Email };
 
             var result = await _userManager.CreateAsync(user, registerDTO.Password);
 
@@ -74,24 +74,34 @@ namespace API.Controllers
             await _userManager.AddToRoleAsync(user, "Member");
 
             return StatusCode(201);
-       }
+        }
 
         [Authorize]
-       [HttpGet("currentUser")]
-       public async Task<ActionResult<UserDTO>> GetCurrentUser()
-       {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name) ;
+        [HttpGet("currentUser")]
+        public async Task<ActionResult<UserDTO>> GetCurrentUser()
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
 
             var userBasket = await RetriveBasket(User.Identity.Name);
 
-            return new UserDTO{
+            return new UserDTO
+            {
                 Email = user.Email,
                 Token = await _tokenService.GenerateToken(user),
                 Basket = userBasket?.MapBasketToDto()
             };
-       }
+        }
 
-       private async Task<Basket> RetriveBasket(string buyerId)
+        [Authorize]
+        [HttpGet("savedAddress")]
+        public async Task<ActionResult<UserAddress>> GetSavedAddress()
+        {
+            return await _userManager.Users
+                .Where(x => x.UserName == User.Identity.Name)
+                .Select(user => user.Address)
+                .FirstOrDefaultAsync();
+        }
+        private async Task<Basket> RetriveBasket(string buyerId)
         {
             if (string.IsNullOrEmpty(buyerId))
             {

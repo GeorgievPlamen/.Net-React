@@ -58,7 +58,7 @@ const requests = {
     post: (url: string, body: object) => axios.post(url, body).then(responseBody),
     put: (url: string, body: object) => axios.put(url, body).then(responseBody),
     delete: (url: string) => axios.delete(url).then(responseBody)
-}
+} 
 
 const Catalog = {
     list: (params: URLSearchParams) => requests.get("products", params),
@@ -86,13 +86,21 @@ const Account = {
     login: (values: any) => requests.post("account/login", values),
     register: (values: any) => requests.post("account/register", values),
     currentUser: () => requests.get("account/currentUser"),
+    fetchAddress: () => requests.get("account/savedAddress")
+}
+
+const Orders = {
+    list: () => requests.get("orders"),
+    fetch: (id: number) => requests.get(`order/${id}`),
+    create: (values: any) => requests.post("orders", values)
 }
 
 const agent = {
     Catalog,
     TestErrors,
     Basket,
-    Account
+    Account,
+    Orders
 }
 
 export default agent;
