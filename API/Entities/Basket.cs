@@ -11,6 +11,8 @@ namespace API.Entities
         public int Id { get; set; }
         public string BuyyerId { get; set; }
         public List<BasketItem> Items { get; set; } = new ();
+        public string PaymentIntentId { get; set; }
+        public string ClientSercret { get; set; }
 
         public void AddItem(Product product, int quantity)
         {
