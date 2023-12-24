@@ -37,8 +37,6 @@ namespace API.Services
                 };
 
                 intent = await service.CreateAsync(options);
-                basket.PaymentIntentId = intent.Id;
-                basket.ClientSercret = intent.ClientSecret;
             }
             else 
             {
