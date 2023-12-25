@@ -1,0 +1,26 @@
+# fly.toml app configuration file generated for teststoreapp on 2023-12-25T11:15:52+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "teststoreapp"
+primary_region = "cdg"
+
+[build]
+  image = "georgievp/restore:latest"
+
+[env]
+  ASPNETCORE_URLS = "http://+:8080"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 256
